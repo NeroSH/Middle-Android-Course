@@ -56,7 +56,6 @@ object UserHolder {
         map.clear()
     }
 
-
 }
 
 private fun String.validateLogin(): String {
