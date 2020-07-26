@@ -25,7 +25,7 @@ class User private constructor(
             .map { it.first().toUpperCase() }
             .joinToString(" ")
 
-    private var phone: String? = null
+    internal var phone: String? = null
         set(value) {
             field = value?.replace("[^+\\d]".toRegex(), "")
         }
@@ -43,7 +43,7 @@ class User private constructor(
     private lateinit var passwordHash: String
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    private var accessCode: String? = null
+    var accessCode: String? = null
 
     // by email
     constructor(
@@ -115,7 +115,7 @@ class User private constructor(
     }
 
     private fun sendAccessCodeToUser(phone: String?, code: String) {
-        println("sending access code $code to $phone ")
+        println("Sending access code $code to $phone ")
     }
 
     private fun String.md5(): String {
@@ -123,6 +123,13 @@ class User private constructor(
         val digest = md.digest(toByteArray())
         val hexString = BigInteger(1, digest).toString(16)
         return hexString.padStart(32, '0')
+    }
+
+    fun generateNewAccessCode() {
+        val code = generateAccessCode()
+        passwordHash = encrypt(code)
+        accessCode = code
+        sendAccessCodeToUser(phone, code)
     }
 
     companion object Factory {
@@ -141,6 +148,7 @@ class User private constructor(
                 else -> throw IllegalArgumentException("Email or phone must not be empty")
             }
         }
+
     }
 }
 
