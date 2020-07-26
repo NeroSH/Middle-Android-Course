@@ -1,7 +1,6 @@
-package ru.skillbranch.kotlinexample.extensions
+package ru.skillbranch.kotlinexample
 
 import androidx.annotation.VisibleForTesting
-import ru.skillbranch.kotlinexample.User
 
 object UserHolder {
     private val map = mutableMapOf<String, User>()
@@ -45,7 +44,7 @@ object UserHolder {
 
     fun requestAccessCode(login: String) {
         map[login.run{
-            this?.replace("[^+\\d]".toRegex(), "")
+            this.replace("[^+\\d]".toRegex(), "")
         }]?.also { user ->
             user.generateNewAccessCode()
         }
