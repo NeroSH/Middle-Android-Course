@@ -4,6 +4,7 @@ import androidx.annotation.VisibleForTesting
 
 object UserHolder {
     private val map = mutableMapOf<String, User>()
+
     fun registerUser(
         fullName: String,
         email: String,
@@ -18,7 +19,6 @@ object UserHolder {
                 }
             }
     }
-
 
     fun registerUserByPhone(
         fullName: String,
@@ -35,20 +35,39 @@ object UserHolder {
     }
 
     fun loginUser(login: String, password: String): String? {
-        return map[login.trim().validateLogin()]?.run {
+        val result = map[login.trim().validateLogin()]?.run {
             if (checkPassword(password)) this.userInfo
             else null
         }
+        return result
     }
 
-
     fun requestAccessCode(login: String) {
-        map[login.run{
+        map[login.run {
             this.replace("[^+\\d]".toRegex(), "")
         }]?.also { user ->
             user.generateNewAccessCode()
         }
     }
+
+    fun importUsers(list: List<String>): List<User> {
+        val users = mutableListOf<User>()
+        for (u in list) {
+            val filteredUser = u.trim().split(";")
+            users.add(
+                User.makeUser(
+                    fullName = filteredUser[0],
+                    email = filteredUser[1],
+                    password = filteredUser[2],
+                    phone = filteredUser[3]
+                ).also {
+                    map[it.login] = it
+                }
+            )
+        }
+        return users
+    }
+
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     fun clearHolder() {
@@ -60,7 +79,10 @@ object UserHolder {
 private fun String.validateLogin(): String {
     return when {
         this.matches("[A-Za-z0-9. %+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{3,4}".toRegex()) -> this.toLowerCase()
-        this.matches("^\\+((\\()*([0-9]+)(\\))*\\s*-*)*$".toRegex()) -> this.replace("[^+\\d]".toRegex(), "")
+        this.matches("^\\+((\\()*([0-9]+)(\\))*\\s*-*)*$".toRegex()) -> this.replace(
+            "[^+\\d]".toRegex(),
+            ""
+        )
         else -> this
     }
 }

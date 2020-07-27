@@ -12,7 +12,7 @@ class User private constructor(
     rawPhone: String? = null,
     meta: Map<String, Any>? = null
 ) {
-//    private val firstName: String
+    //    private val firstName: String
 //    private val lastName: String?
     internal val userInfo: String
     private val fullName: String
@@ -70,12 +70,23 @@ class User private constructor(
         sendAccessCodeToUser(phone, code)
     }
 
+    constructor(
+        firstName: String,
+        lastName: String?,
+        email: String?,
+        password: String,
+        rawPhone: String?
+    ) : this(firstName, lastName, email = email, rawPhone = rawPhone, meta = mapOf("src" to "csv")) {
+        println("Seconrady constructor to import from CSV")
+        passwordHash = password
+        accessCode = passwordHash.split(":")[0]
+    }
 
     init {
         println("Init block called ")
 
         check(!firstName.isBlank()) { "First Name must not be empty" }
-        check(email.isNullOrBlank() || rawPhone.isNullOrBlank()) { "Email must not be empty" }
+        check(!email.isNullOrBlank() || !rawPhone.isNullOrBlank()) { "Email must not be empty" }
         phone = rawPhone
         login = email ?: phone!!
 
@@ -118,18 +129,18 @@ class User private constructor(
         println("Sending access code $code to $phone ")
     }
 
-    private fun String.md5(): String {
-        val md = MessageDigest.getInstance("MD5")
-        val digest = md.digest(toByteArray())
-        val hexString = BigInteger(1, digest).toString(16)
-        return hexString.padStart(32, '0')
-    }
-
     fun generateNewAccessCode() {
         val code = generateAccessCode()
         passwordHash = encrypt(code)
         accessCode = code
         sendAccessCodeToUser(phone, code)
+    }
+
+    private fun String.md5(): String {
+        val md = MessageDigest.getInstance("MD5")
+        val digest = md.digest(toByteArray())
+        val hexString = BigInteger(1, digest).toString(16)
+        return hexString.padStart(32, '0')
     }
 
     companion object Factory {
@@ -141,10 +152,10 @@ class User private constructor(
             phone: String? = null
         ): User {
             val (firstName, lastName) = fullName.fullNameToPair()
-            return when{
-                !phone.isNullOrBlank() -> User(firstName,lastName, phone)
-                !email.isNullOrBlank() && !password.isNullOrBlank() -> User(firstName, lastName, email, password)
-//                !email.isValidEmail() -> throw IllegalArgumentException("A user with this email already exists")
+            return when {
+                !password.isNullOrBlank() && password.matches(".{0,16}:.{32}".toRegex()) -> User(firstName, lastName, email, password, phone)
+                !phone.isNullOrBlank() -> User(firstName, lastName, phone)
+                !email.isNullOrBlank() && !password.isNullOrBlank() -> User(firstName, lastName, email, password )
                 else -> throw IllegalArgumentException("Email or phone must not be empty")
             }
         }
@@ -156,11 +167,13 @@ private fun String.fullNameToPair(): Pair<String, String?> {
     return this.split(" ")
         .filter { it.isNotBlank() }
         .run {
-            when(size) {
+            when (size) {
                 1 -> first() to null
                 2 -> first() to last()
-                else -> throw java.lang.IllegalArgumentException("Fullname can contain only " +
-                        "firstname and lastname. Given ${this@fullNameToPair}. ")
+                else -> throw java.lang.IllegalArgumentException(
+                    "Fullname can contain only " +
+                            "firstname and lastname. Given ${this@fullNameToPair}. "
+                )
             }
         }
 }
