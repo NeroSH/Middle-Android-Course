@@ -106,7 +106,7 @@ class ArticleViewModel(private val articleId: String) : BaseViewModel<ArticleSta
     }
 
     override fun handleSearchMode(isSearch: Boolean) {
-        TODO("Not yet implemented")
+        updateState { it.copy(isSearch = !it.isSearch) }
     }
 
     override fun handleSearch(query: String?) {
