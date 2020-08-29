@@ -1,7 +1,6 @@
 package ru.skillbranch.skillarticles.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -76,6 +75,7 @@ class RootActivity : AppCompatActivity() {
         btn_like.isChecked = data.isLike
         btn_bookmark.isChecked = data.isBookmark
 
+        // bind submenu views
         switch_mode.isChecked = data.isDarkMode
         delegate.localNightMode =
             if (data.isDarkMode) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
@@ -90,8 +90,6 @@ class RootActivity : AppCompatActivity() {
         }
 
         // bind content
-        Log.w("renderUi", "data.content = ${data.content}")
-        Log.w("renderUi", "data.isLoadingContent = ${data.isLoadingContent}")
         tv_text_content.text =
             if (data.isLoadingContent) "loading" else data.content.first() as String
 

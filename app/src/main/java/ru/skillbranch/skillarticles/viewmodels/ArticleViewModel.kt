@@ -19,7 +19,8 @@ class ArticleViewModel(private val articleId: String) : BaseViewModel<ArticleSta
                 title = article.title,
                 category = article.category,
                 categoryIcon = article.categoryIcon,
-                date = article.date.format()
+                date = article.date.format(),
+                author = article.author
             )
         }
 
@@ -72,7 +73,23 @@ class ArticleViewModel(private val articleId: String) : BaseViewModel<ArticleSta
     }
 
     override fun handleBookmark() {
-        updateState { it.copy(isBookmark = !it.isBookmark) }
+        val toggleBookmark = {
+            val info = currentState.toArticlePersonalInfo()
+            repository.updateArticlePersonalInfo(info.copy(isBookmark = !info.isBookmark))
+        }
+
+        toggleBookmark()
+
+        val msg = if (currentState.isBookmark) Notify.TextMessage("Add to bookmarks")
+        else {
+            Notify.ActionMessage(
+                "Remove from bookmarks", //message
+                "No, still like it", //action label on snackbar
+                toggleBookmark //bookmark handler in case "No, still like it" pressed
+            )
+        }
+
+        notify(msg)
     }
 
     override fun handleLike() {
@@ -86,7 +103,7 @@ class ArticleViewModel(private val articleId: String) : BaseViewModel<ArticleSta
         val msg = if (currentState.isLike) Notify.TextMessage("Mark is liked")
         else {
             Notify.ActionMessage(
-                "Don't like it anymore", //message
+                "Don`t like it anymore", //message
                 "No, still like it", //action label on snackbar
                 toggleLike //like handler in case "No, still like it" pressed
             )
