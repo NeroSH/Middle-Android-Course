@@ -14,11 +14,12 @@ import ru.skillbranch.skillarticles.R
 import ru.skillbranch.skillarticles.extensions.dpToPx
 import kotlin.math.hypot
 
-class ArticleSubmenu @JvmOverloads constructor(
+class ArticleSubmenu @JvmOverloads constructor (
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : ConstraintLayout(context, attrs, defStyleAttr) {
+): ConstraintLayout(context, attrs, defStyleAttr) {
+
     var isOpen = false
     private var centerX: Float = context.dpToPx(200)
     private var centerY: Float = context.dpToPx(96)
@@ -34,12 +35,14 @@ class ArticleSubmenu @JvmOverloads constructor(
     fun open() {
         if (isOpen || !isAttachedToWindow) return
         isOpen = true
+        visibility = View.VISIBLE
         animatedShow()
     }
 
     fun close() {
         if (!isOpen || !isAttachedToWindow) return
         isOpen = false
+        visibility = View.GONE
         animatedHide()
     }
 

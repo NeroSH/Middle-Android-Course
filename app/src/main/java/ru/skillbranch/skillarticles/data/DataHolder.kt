@@ -22,12 +22,12 @@ object LocalDataHolder {
             if (isDelay) delay(1000)
             withContext(Dispatchers.Main){
                 articleData.value = ArticleData(
-                        title = "CoordinatorLayout Basic",
-                        category = "Android",
-                        categoryIcon = R.drawable.logo,
-                        date = Date(),
-                        author = "Skill-Branch"
-                    )
+                    title = "CoordinatorLayout Basic",
+                    category = "Android",
+                    categoryIcon = R.drawable.logo,
+                    date = Date(),
+                    author = "Skill-Branch"
+                )
             }
 
         }

@@ -27,17 +27,17 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/btn_text_down"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/divider_h"/>
+        app:layout_constraintBottom_toTopOf="@+id/divider_h"/>
 
     <ru.skillbranch.skillarticles.ui.custom.CheckableImageView
         android:id="@+id/btn_text_up"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
         android:background="?attr/selectableItemBackground"
         android:src="@drawable/ic_title_black_24dp"
         android:tint="@color/tint_color"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/divider_v"
@@ -51,7 +51,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btn_text_down"/>
-
+    
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/switch_mode"
         android:layout_width="wrap_content"
@@ -59,17 +59,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/divider_h"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"/>
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Темный режим"
+        android:text="@string/night_mode"
         app:layout_constraintStart_toStartOf="parent"
+        android:textColor="?attr/colorOnSurface"
         app:layout_constraintTop_toBottomOf="@id/divider_h"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:textColor="?attr/colorOnSurface"
-        android:layout_marginLeft="16dp"/>
+        android:layout_marginStart="16dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
