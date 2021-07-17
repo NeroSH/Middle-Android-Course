@@ -16,3 +16,5 @@
 /app/src/androidTest/
 .externalNativeBuild
 .cxx
+build.gradle
+settings.gradle
