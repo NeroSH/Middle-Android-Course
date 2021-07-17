@@ -1,8 +1,7 @@
-package ru.skillbranch.skillarticles.viewmodels.base
+package ru.skillbranch.skillarticles.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import ru.skillbranch.skillarticles.viewmodels.ArticleViewModel
 
 class ViewModelFactory(private val params: Any) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
