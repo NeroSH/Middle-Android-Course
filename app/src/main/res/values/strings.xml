@@ -1,6 +1,0 @@
-<resources>
-    <string name="app_name">skill-articles</string>
-    <string name="loading">loading…</string>
-    <string name="night_mode">Темный режим</string>
-    <string name="article_search_placeholder">Search</string>
-</resources>
